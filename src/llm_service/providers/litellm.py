@@ -206,9 +206,10 @@ class LiteLLMTransport(BaseLLMProvider):
     def _openrouter_kwargs(self, request: NormalisedLLMRequest) -> dict[str, Any]:
         """Map provider_options to LiteLLM extra_body / extra_headers for OpenRouter.
 
-        OpenRouter reads routing prefs (``provider``) and a fallback list
-        (``models``) from the request body, and app attribution from the
-        HTTP-Referer / X-Title headers. Returns {} for any other provider.
+        OpenRouter reads routing prefs (``provider``), a fallback list
+        (``models``), and a reasoning-token budget (``reasoning``) from the
+        request body, plus app attribution from the HTTP-Referer / X-Title
+        headers. Returns {} for any other provider.
         """
         if request.provider != "openrouter":
             return {}
@@ -219,6 +220,8 @@ class LiteLLMTransport(BaseLLMProvider):
             extra_body["provider"] = options["provider"]
         if options.get("models") is not None:
             extra_body["models"] = options["models"]
+        if options.get("reasoning") is not None:
+            extra_body["reasoning"] = options["reasoning"]
 
         referer = options.get("referer") or settings.openrouter_app_url
         title = options.get("title") or settings.openrouter_app_title

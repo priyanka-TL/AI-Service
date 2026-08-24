@@ -67,6 +67,7 @@ class ChatRequest(BaseModel):
     # Provider-specific passthrough. Currently consumed only for provider="openrouter":
     #   provider — OpenRouter routing prefs (order, allow_fallbacks, data_collection, ...)
     #   models   — OpenRouter model fallback list
+    #   reasoning — OpenRouter reasoning-token budget (e.g. {"max_tokens": 0} to disable)
     #   referer / title — per-request app-attribution overrides
     provider_options: Optional[dict[str, Any]] = None
 
